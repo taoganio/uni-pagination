@@ -2,11 +2,8 @@ package io.github.taoganio.unipagination.web.mvc;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.http.server.PathContainer;
 import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
-import org.springframework.web.util.pattern.PathPattern;
-import org.springframework.web.util.pattern.PathPatternParser;
 
 @Getter
 @Setter

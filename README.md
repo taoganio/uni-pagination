@@ -4,35 +4,35 @@
     <summary >🌐 Language</summary>
     <div>
       <div align="center">
-        <a href="https://openaitx.github.io/view.html?user=taoganio&project=uni-page&lang=en">English</a>
-        | <a href="https://openaitx.github.io/view.html?user=taoganio&project=uni-page&lang=zh-CN">简体中文</a>
-        | <a href="https://openaitx.github.io/view.html?user=taoganio&project=uni-page&lang=zh-TW">繁體中文</a>
-        | <a href="https://openaitx.github.io/view.html?user=taoganio&project=uni-page&lang=ja">日本語</a>
-        | <a href="https://openaitx.github.io/view.html?user=taoganio&project=uni-page&lang=ko">한국어</a>
-        | <a href="https://openaitx.github.io/view.html?user=taoganio&project=uni-page&lang=hi">हिन्दी</a>
-        | <a href="https://openaitx.github.io/view.html?user=taoganio&project=uni-page&lang=th">ไทย</a>
-        | <a href="https://openaitx.github.io/view.html?user=taoganio&project=uni-page&lang=fr">Français</a>
-        | <a href="https://openaitx.github.io/view.html?user=taoganio&project=uni-page&lang=de">Deutsch</a>
-        | <a href="https://openaitx.github.io/view.html?user=taoganio&project=uni-page&lang=es">Español</a>
-        | <a href="https://openaitx.github.io/view.html?user=taoganio&project=uni-page&lang=it">Italiano</a>
-        | <a href="https://openaitx.github.io/view.html?user=taoganio&project=uni-page&lang=ru">Русский</a>
-        | <a href="https://openaitx.github.io/view.html?user=taoganio&project=uni-page&lang=pt">Português</a>
-        | <a href="https://openaitx.github.io/view.html?user=taoganio&project=uni-page&lang=nl">Nederlands</a>
-        | <a href="https://openaitx.github.io/view.html?user=taoganio&project=uni-page&lang=pl">Polski</a>
-        | <a href="https://openaitx.github.io/view.html?user=taoganio&project=uni-page&lang=ar">العربية</a>
-        | <a href="https://openaitx.github.io/view.html?user=taoganio&project=uni-page&lang=fa">فارسی</a>
-        | <a href="https://openaitx.github.io/view.html?user=taoganio&project=uni-page&lang=tr">Türkçe</a>
-        | <a href="https://openaitx.github.io/view.html?user=taoganio&project=uni-page&lang=vi">Tiếng Việt</a>
-        | <a href="https://openaitx.github.io/view.html?user=taoganio&project=uni-page&lang=id">Bahasa Indonesia</a>
-        | <a href="https://openaitx.github.io/view.html?user=taoganio&project=uni-page&lang=as">অসমীয়া</
+        <a href="https://openaitx.github.io/view.html?user=taoganio&project=uni-pagination&lang=en">English</a>
+        | <a href="https://openaitx.github.io/view.html?user=taoganio&project=uni-pagination&lang=zh-CN">简体中文</a>
+        | <a href="https://openaitx.github.io/view.html?user=taoganio&project=uni-pagination&lang=zh-TW">繁體中文</a>
+        | <a href="https://openaitx.github.io/view.html?user=taoganio&project=uni-pagination&lang=ja">日本語</a>
+        | <a href="https://openaitx.github.io/view.html?user=taoganio&project=uni-pagination&lang=ko">한국어</a>
+        | <a href="https://openaitx.github.io/view.html?user=taoganio&project=uni-pagination&lang=hi">हिन्दी</a>
+        | <a href="https://openaitx.github.io/view.html?user=taoganio&project=uni-pagination&lang=th">ไทย</a>
+        | <a href="https://openaitx.github.io/view.html?user=taoganio&project=uni-pagination&lang=fr">Français</a>
+        | <a href="https://openaitx.github.io/view.html?user=taoganio&project=uni-pagination&lang=de">Deutsch</a>
+        | <a href="https://openaitx.github.io/view.html?user=taoganio&project=uni-pagination&lang=es">Español</a>
+        | <a href="https://openaitx.github.io/view.html?user=taoganio&project=uni-pagination&lang=it">Italiano</a>
+        | <a href="https://openaitx.github.io/view.html?user=taoganio&project=uni-pagination&lang=ru">Русский</a>
+        | <a href="https://openaitx.github.io/view.html?user=taoganio&project=uni-pagination&lang=pt">Português</a>
+        | <a href="https://openaitx.github.io/view.html?user=taoganio&project=uni-pagination&lang=nl">Nederlands</a>
+        | <a href="https://openaitx.github.io/view.html?user=taoganio&project=uni-pagination&lang=pl">Polski</a>
+        | <a href="https://openaitx.github.io/view.html?user=taoganio&project=uni-pagination&lang=ar">العربية</a>
+        | <a href="https://openaitx.github.io/view.html?user=taoganio&project=uni-pagination&lang=fa">فارسی</a>
+        | <a href="https://openaitx.github.io/view.html?user=taoganio&project=uni-pagination&lang=tr">Türkçe</a>
+        | <a href="https://openaitx.github.io/view.html?user=taoganio&project=uni-pagination&lang=vi">Tiếng Việt</a>
+        | <a href="https://openaitx.github.io/view.html?user=taoganio&project=uni-pagination&lang=id">Bahasa Indonesia</a>
+        | <a href="https://openaitx.github.io/view.html?user=taoganio&project=uni-pagination&lang=as">অসমীয়া</a>
       </div>
     </div>
   </details>
 </div>
 
-# Uni-Page 分页框架
+# Uni-Pagination 分页框架
 
-Uni-Page 是一个基于 Java 的通用分页框架，它通过抽象化的设计，为不同数据源提供统一的分页查询接口。框架采用模块化架构，现目前集成 JDBC、Mybatis、MongoDB、Elasticsearch 等多种数据源，并提供了灵活的扩展机制。
+Uni Pagination 是一个基于 Java 的通用分页框架，它通过抽象化的设计，为不同数据源提供统一的分页查询接口。框架采用模块化架构，现目前集成 JDBC、Mybatis、MongoDB、Elasticsearch 等多种数据源，并提供了灵活的扩展机制。
 
 ## 核心设计
 
@@ -87,39 +87,33 @@ Uni-Page 是一个基于 Java 的通用分页框架，它通过抽象化的设�
 
 ## 核心模块
 
-### [uni-page](https://github.com/taoganio/uni-pagination/tree/main/uni-page)
+### [uni-pagination](https://github.com/taoganio/uni-pagination/tree/main/uni-pagination)
 核心分页库，提供基础的分页接口和抽象实现。
 
-### [uni-page-jdbc](https://github.com/taoganio/uni-pagination/tree/main/uni-page-jdbc)
+### [uni-pagination-jdbc](https://github.com/taoganio/uni-pagination/tree/main/uni-pagination-jdbc)
 JDBC 数据源支持模块，提供基于 JDBC 的分页实现。
 
-### [uni-page-jdbc-mybatis](https://github.com/taoganio/uni-pagination/tree/main/uni-page-jdbc-mybatis)
+### [uni-pagination-jdbc-mybatis](https://github.com/taoganio/uni-pagination/tree/main/uni-pagination-mybatis)
 MyBatis 集成模块，提供与 MyBatis 框架的集成支持。
-    
-### [uni-page-mongodb](https://github.com/taoganio/uni-pagination/tree/main/uni-page-mongodb)
-MongoDB 数据源支持模块，提供基于 MongoDB 的分页实现。
 
-### [uni-page-elasticsearch](https://github.com/taoganio/uni-pagination/tree/main/uni-page-elasticsearch)
-Elasticsearch 数据源支持模块，提供基于 ES 的分页实现。
-
-### [spring-boot-starter-web-uni-page](https://github.com/taoganio/uni-pagination/tree/main/spring-boot-starter-web-uni-page)
+### [spring-boot-starter-web-uni-pagination](https://github.com/taoganio/uni-pagination/tree/main/spring-boot-starter-web-uni-pagination)
 Spring MVC 环境下的分页支持模块，提供与 Spring MVC 的集成支持，就像编写普通的控制器一样简单。
 - 分页参数自动绑定
 - 分页结果自动转换
 
-### [web-uni-page-test](https://github.com/taoganio/uni-pagination/tree/main/web-uni-page-test)
+### [web-uni-pagination-test](https://github.com/taoganio/uni-pagination/tree/main/web-uni-pagination-test)
 Spring Boot Web 环境下的分页测试模块，提供分页功能的集成测试。
 
 
-## 快速开始, 以uni-page-jdbc为例
+## 快速开始, 以uni-pagination-jdbc为例
 
 ### Maven 依赖
 
 ```xml
 <dependency>
-    <groupId>com.github.ethancarter</groupId>
-    <artifactId>uni-page-jdbc</artifactId>
-    <version>1.9</version>
+   <groupId>io.github.taoganio</groupId>
+   <artifactId>uni-pagination-jdbc</artifactId>
+   <version>1.0.0</version>
 </dependency>
 ```
 

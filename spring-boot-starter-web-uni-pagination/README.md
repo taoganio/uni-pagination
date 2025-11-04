@@ -1,4 +1,4 @@
-# Spring Boot Starter Web Uni-Page
+# Spring Boot Starter Web Uni Pagination
 
 Spring Boot Starter Web Uni Pagination 是一个基于 Spring Boot 的分页查询框架，它通过声明式的方式简化了 Web
 环境下的分页开发。开发者只需定义分页查询语句，框架就能自动处理分页请求的各个动作，无需编写重复的分页处理代码。
@@ -165,10 +165,10 @@ public class UserPaginationComponent implements PaginationComponent {
 
 ### UniPageProperties 配置项
 
-| 参数项                              | 参数类型        | 是否必填 | 默认值                 | 说明           |
-|----------------------------------|-------------|------|---------------------|--------------|
-| spring.unipagination.web.enabled | boolean     | 否    | true                | 启用动态注册MVC控制器 |
-| spring.unipagination.web.path    | String      | 否    | /unipage            | 分页请求的基础路径    |
+| 参数项                              | 参数类型        | 是否必填 | 默认值             | 说明           |
+|----------------------------------|-------------|------|-----------------|--------------|
+| spring.unipagination.web.enabled | boolean     | 否    | true            | 启用动态注册MVC控制器 |
+| spring.unipagination.web.path    | String      | 否    |                 | 分页请求的基础路径    |
 | spring.unipagination.web.actions | Set<Action> | 否    | info, data, exports | 支持的分页操作配置    |
 
 ### Action 配置项

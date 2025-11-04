@@ -1,6 +1,6 @@
-# Uni-Page JDBC MyBatis
+# Uni Pagination MyBatis
 
-Uni Pagination JDBC MyBatis 是 Uni-Pagination 框架的 MyBatis 集成组件，用于支持 MyBatis Mapper 接口的分页查询。
+Uni Pagination MyBatis 是 Uni-Pagination 框架的 MyBatis 集成组件，用于支持 MyBatis Mapper 接口的分页查询。
 
 ## 快速开始
 

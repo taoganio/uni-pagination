@@ -1,4 +1,4 @@
-# Uni-Page JDBC
+# Uni Pagination JDBC
 
 Uni Pagination JDBC 是一个基于 JDBC 的分页查询框架，它提供了对多种数据库方言的支持，并简化了分页查询的开发。该模块是 Uni-Pagination 框架的核心组件之一，主要负责 SQL 分页查询的执行和结果处理。
 
@@ -9,7 +9,6 @@ Uni Pagination JDBC 是一个基于 JDBC 的分页查询框架，它提供了对
 - 命名参数支持：支持命名参数绑定，提高 SQL 可读性和安全性
 - SQL 解析优化：使用 JSqlParser 进行 SQL 解析和优化
 - 结果集处理：提供灵活的结果集处理机制
-- 异常处理：统一的异常处理机制
 
 ## 快速开始
 
