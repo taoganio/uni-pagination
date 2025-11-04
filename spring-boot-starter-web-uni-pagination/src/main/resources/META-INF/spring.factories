@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+io.github.taoganio.unipagination.web.autoconfigure.PaginationAutoConfiguration,\
+io.github.taoganio.unipagination.web.autoconfigure.PaginationWebAutoConfiguration

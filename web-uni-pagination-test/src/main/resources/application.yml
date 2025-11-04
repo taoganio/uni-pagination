@@ -1,0 +1,25 @@
+server:
+  port: 9091
+
+spring:
+
+  application:
+    name: uni-page-mvc-test
+
+  datasource:
+    driver-class-name: com.p6spy.engine.spy.P6SpyDriver
+    url: jdbc:p6spy:postgresql://127.0.0.1:5432/ostock_dev
+    username: postgres
+    password: 123456
+
+  unipagination:
+    web:
+      actions:
+        - action: info
+        - action: data
+        - action: exports
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true

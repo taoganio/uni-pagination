@@ -1,0 +1,24 @@
+GET localhost:9091/mp-organization/data?page=0&size=2&name=阿里
+#Content-Type: application/json
+#
+#{
+#  "roleName": "普通管理员",
+#  "account": "张三",
+#  "pageNum": 0,
+#  "pageSize": 2
+#}
+
+### Organization
+POST localhost:9091/organization/data?page=0&size=2&name=阿里
+
+### HELLOWORLD
+POST localhost:9091/collection
+Content-Type: application/json
+Accept: application/xml
+
+{
+  "roleName": "1",
+  "account": "1",
+  "pageNum": 0,
+  "pageSize": 2
+}

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.taoganio.web.test.mybatis.OrganizationPaginationMapper">
+    
+    <select id="getOrganizations" resultType="map">
+        select * from o_stock.organization where name like concat('%', #{name}, '%') order by id desc
+    </select>
+    
+</mapper>
