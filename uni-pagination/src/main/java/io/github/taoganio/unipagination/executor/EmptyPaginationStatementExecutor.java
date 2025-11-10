@@ -16,7 +16,7 @@ import io.github.taoganio.unipagination.statement.PaginationStatement;
 public class EmptyPaginationStatementExecutor implements PaginationStatementExecutor<EmptyPaginationStatement> {
 
     private static final EmptyPaginationStatementExecutor INSTANCE = new EmptyPaginationStatementExecutor();
-    private final Pageable pageable = PageRequest.of(1, 0);
+    private final Pageable pageable = PageRequest.of(0, 1);
     private final PageInformation pageInformation = new PageImpl<>(0, pageable);
     private final EmptyPaginationResultSet resultSet = new EmptyPaginationResultSet(pageable);
 

@@ -86,6 +86,7 @@ public class MongoFindPaginationStatementExecutor implements PaginationStatement
         if (CollectionUtils.isEmpty(documents)) {
             return new EmptyPaginationResultSet(pageable);
         }
+<<<<<<< HEAD
 
         List<ColumnMetadata> columns = inferColumns(documents);
         PaginationResultSetMetadata metadata = new DefaultPaginationResultSetMetadata(pageable, columns);
@@ -93,6 +94,11 @@ public class MongoFindPaginationStatementExecutor implements PaginationStatement
                 .map(d -> new MongoPaginationRow(d, metadata))
                 .collect(Collectors.toList());
         return new DefaultPaginationResultSet(total, metadata, rows);
+=======
+        List<PaginationRow> rows = documents.stream().map(MongoDocumentPaginationRow::new).collect(Collectors.toList());
+        return new DefaultPaginationResultSet(total,
+                new DefaultPaginationResultSetMetadata(pageable, inferColumns(documents)), rows);
+>>>>>>> c21af2b (1、修改 Uni Pagination Web Spring Boot Starter 组织唯一标识为 uni-pagination-web-spring-boot-starter)
     }
 
     private FindIterable<Document> applyFindOptions(MongoFindOptions options, FindIterable<Document> find) {

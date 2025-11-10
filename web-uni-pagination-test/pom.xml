@@ -36,7 +36,7 @@
 
         <dependency>
             <groupId>io.github.taoganio</groupId>
-            <artifactId>spring-boot-starter-web-uni-pagination</artifactId>
+            <artifactId>uni-pagination-web-spring-boot-starter</artifactId>
             <version>1.0.0</version>
         </dependency>
 

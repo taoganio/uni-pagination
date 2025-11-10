@@ -1,148 +1,41 @@
 package io.github.taoganio.unipagination.mongodb;
 
-import io.github.taoganio.unipagination.result.set.PaginationResultSetMetadata;
-import io.github.taoganio.unipagination.result.set.PaginationResultSetMetadataSetter;
+import com.mongodb.lang.Nullable;
 import io.github.taoganio.unipagination.result.set.PaginationRow;
 import org.bson.Document;
+import org.bson.codecs.Encoder;
+import org.bson.conversions.Bson;
+import org.bson.json.JsonWriterSettings;
 
-/**
- * MongoDB 行
- */
-public class MongoPaginationRow implements PaginationRow, PaginationResultSetMetadataSetter {
+import java.util.List;
 
-    private final Document document;
-    private PaginationResultSetMetadata metadata;
+public interface MongoPaginationRow extends PaginationRow, Bson {
 
+<<<<<<< HEAD
     public MongoPaginationRow(Document document, PaginationResultSetMetadata metadata) {
         this.document = document;
         this.metadata = metadata;
     }
+=======
+    @Nullable
+    <T> T getEmbedded(List<?> keys, Class<T> clazz);
+>>>>>>> c21af2b (1、修改 Uni Pagination Web Spring Boot Starter 组织唯一标识为 uni-pagination-web-spring-boot-starter)
 
-    @Override
-    public void setMetadata(PaginationResultSetMetadata metadata) {
-        this.metadata = metadata;
-    }
+    @Nullable
+    <T> T getEmbedded(List<?> keys, T defaultValue);
 
-    @Override
-    public int getColumnCount() {
-        return metadata.getColumnCount();
-    }
+    @Nullable
+    <T> List<T> getList(Object key, Class<T> clazz);
 
-    @Override
-    public byte[] getBytes(int columnIndex) {
-        Object v = getObject(columnIndex);
-        return v instanceof byte[] ? (byte[]) v : null;
-    }
+    @Nullable
+    <T> List<T> getList(Object key, Class<T> clazz, List<T> defaultValue);
 
-    @Override
-    public byte[] getBytes(String columnName) {
-        Object v = getObject(columnName);
-        return v instanceof byte[] ? (byte[]) v : null;
-    }
+    String toJson();
 
-    @Override
-    public Byte getByte(int columnIndex) {
-        return getObject(columnIndex, Byte.class);
-    }
+    String toJson(JsonWriterSettings writerSettings);
 
-    @Override
-    public Byte getByte(String columnName) {
-        return getObject(columnName, Byte.class);
-    }
+    String toJson(Encoder<Document> encoder);
 
-    @Override
-    public Short getShort(int columnIndex) {
-        return getObject(columnIndex, Short.class);
-    }
+    String toJson(JsonWriterSettings writerSettings, Encoder<Document> encoder);
 
-    @Override
-    public Short getShort(String columnName) {
-        return getObject(columnName, Short.class);
-    }
-
-    @Override
-    public Integer getInteger(int columnIndex) {
-        return getObject(columnIndex, Integer.class);
-    }
-
-    @Override
-    public Integer getInteger(String columnName) {
-        return getObject(columnName, Integer.class);
-    }
-
-    @Override
-    public Float getFloat(int columnIndex) {
-        return getObject(columnIndex, Float.class);
-    }
-
-    @Override
-    public Float getFloat(String columnName) {
-        return getObject(columnName, Float.class);
-    }
-
-    @Override
-    public Double getDouble(int columnIndex) {
-        return getObject(columnIndex, Double.class);
-    }
-
-    @Override
-    public Double getDouble(String columnName) {
-        return getObject(columnName, Double.class);
-    }
-
-    @Override
-    public Long getLong(int columnIndex) {
-        return getObject(columnIndex, Long.class);
-    }
-
-    @Override
-    public Long getLong(String columnName) {
-        return getObject(columnName, Long.class);
-    }
-
-    @Override
-    public Boolean getBoolean(int columnIndex) {
-        return getObject(columnIndex, Boolean.class);
-    }
-
-    @Override
-    public Boolean getBoolean(String columnName) {
-        return getObject(columnName, Boolean.class);
-    }
-
-    @Override
-    public String getString(int columnIndex) {
-        Object v = getObject(columnIndex);
-        return v != null ? String.valueOf(v) : null;
-    }
-
-    @Override
-    public String getString(String columnName) {
-        Object v = getObject(columnName);
-        return v != null ? String.valueOf(v) : null;
-    }
-
-    @Override
-    public Object getObject(int columnIndex) {
-        String name = metadata.getColumnMetadata(columnIndex).getColumnName();
-        return document.get(name);
-    }
-
-    @Override
-    public Object getObject(String columnName) {
-        return document.get(columnName);
-    }
-
-    @Override
-    public <T> T getObject(String columnName, Class<T> clazz) {
-        return document.get(columnName, clazz);
-    }
-
-    @Override
-    public <T> T getObject(int columnIndex, Class<T> clazz) {
-        String name = metadata.getColumnMetadata(columnIndex).getColumnName();
-        return document.get(name, clazz);
-    }
 }
-
-

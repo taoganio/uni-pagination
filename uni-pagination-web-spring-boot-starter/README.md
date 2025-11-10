@@ -1,4 +1,4 @@
-# Spring Boot Starter Web Uni Pagination
+# Uni Pagination Web Spring Boot Starter
 
 Spring Boot Starter Web Uni Pagination 是一个基于 Spring Boot 的分页查询框架，它通过声明式的方式简化了 Web
 环境下的分页开发。开发者只需定义分页查询语句，框架就能自动处理分页请求的各个动作，无需编写重复的分页处理代码。
@@ -19,7 +19,7 @@ Spring Boot Starter Web Uni Pagination 是一个基于 Spring Boot 的分页查�
 
 <dependency>
     <groupId>io.github.taoganio</groupId>
-    <artifactId>spring-boot-starter-web-uni-pagination</artifactId>
+    <artifactId>uni-pagination-web-spring-boot-starter</artifactId>
     <version>1.0.0</version>
 </dependency>
 ```

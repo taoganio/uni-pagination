@@ -96,6 +96,9 @@ JDBC 数据源支持模块，提供基于 JDBC 的分页实现。
 ### [uni-pagination-jdbc-mybatis](https://github.com/taoganio/uni-pagination/tree/main/uni-pagination-mybatis)
 MyBatis 集成模块，提供与 MyBatis 框架的集成支持。
 
+### [uni-pagination-mongodb](https://github.com/taoganio/uni-pagination/tree/main/uni-pagination-mongodb)
+MongoDB 集成组件，用于支持 MongoDB 的分页查询。
+
 ### [spring-boot-starter-web-uni-pagination](https://github.com/taoganio/uni-pagination/tree/main/spring-boot-starter-web-uni-pagination)
 Spring MVC 环境下的分页支持模块，提供与 Spring MVC 的集成支持，就像编写普通的控制器一样简单。
 - 分页参数自动绑定
