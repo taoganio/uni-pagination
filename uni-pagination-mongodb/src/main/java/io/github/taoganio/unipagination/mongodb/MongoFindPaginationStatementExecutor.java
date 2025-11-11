@@ -29,16 +29,16 @@ import java.util.stream.Collectors;
  */
 public class MongoFindPaginationStatementExecutor implements PaginationStatementExecutor<MongoPaginationStatement> {
 
-    private final Supplier<MongoDatabase> mongoDatabase;
+    private final Supplier<MongoDatabase> databaseProvider;
 
-    public MongoFindPaginationStatementExecutor(MongoDatabase mongoDatabase) {
-        Assert.notNull(mongoDatabase, "MongoDatabase must not be null");
-        this.mongoDatabase = () -> mongoDatabase;
+    public MongoFindPaginationStatementExecutor(MongoDatabase database) {
+        Assert.notNull(database, "MongoDatabase must not be null");
+        this.databaseProvider = () -> database;
     }
 
-    public MongoFindPaginationStatementExecutor(Supplier<MongoDatabase> mongoDatabase) {
-        Assert.notNull(mongoDatabase, "MongoDatabase must not be null");
-        this.mongoDatabase = mongoDatabase;
+    public MongoFindPaginationStatementExecutor(Supplier<MongoDatabase> databaseProvider) {
+        Assert.notNull(databaseProvider, "databaseProvider must not be null");
+        this.databaseProvider = databaseProvider;
     }
 
     @Override
@@ -50,7 +50,7 @@ public class MongoFindPaginationStatementExecutor implements PaginationStatement
     public PageInformation executeForInformation(MongoPaginationStatement statement) throws PaginationException {
         MongoCollection<Document> collection = getCollection(statement);
         Bson filter = statement.getFilter();
-        long total = collection.countDocuments(filter);
+        long total = filter != null ? collection.countDocuments(filter) : collection.countDocuments();
         return new PageImpl<>(total, statement.getPageable());
     }
 
@@ -59,25 +59,13 @@ public class MongoFindPaginationStatementExecutor implements PaginationStatement
         MongoCollection<Document> collection = getCollection(statement);
         Pageable pageable = statement.getPageable();
         Bson filter = statement.getFilter();
-        long total = collection.countDocuments(filter);
+        long total = filter != null ? collection.countDocuments(filter) : collection.countDocuments();
         if (total <= 0) {
             return new EmptyPaginationResultSet(pageable);
         }
 
-        FindIterable<Document> find = collection.find(filter);
-        MongoFindOptions options = statement.getFindOptions();
-
-        // 应用 MongoFindOptions
-        if (options != null) {
-            find = applyFindOptions(options, find);
-        }
-
-        Bson sort = toMongoSort(pageable.getSort());
-        if (sort != null) {
-            find = find.sort(sort);
-        }
-        int skip = Math.max(pageable.getPageNumber(), 0) * pageable.getPageSize();
-        find = find.skip(skip).limit(pageable.getPageSize());
+        FindIterable<Document> find = filter != null ? collection.find(filter) : collection.find();
+        find = applyFindOptions(statement, find);
 
         List<Document> documents = new ArrayList<>();
         for (Document doc : find) {
@@ -86,117 +74,88 @@ public class MongoFindPaginationStatementExecutor implements PaginationStatement
         if (CollectionUtils.isEmpty(documents)) {
             return new EmptyPaginationResultSet(pageable);
         }
-<<<<<<< HEAD
-
-        List<ColumnMetadata> columns = inferColumns(documents);
-        PaginationResultSetMetadata metadata = new DefaultPaginationResultSetMetadata(pageable, columns);
-        List<PaginationRow> rows = documents.stream()
-                .map(d -> new MongoPaginationRow(d, metadata))
-                .collect(Collectors.toList());
-        return new DefaultPaginationResultSet(total, metadata, rows);
-=======
         List<PaginationRow> rows = documents.stream().map(MongoDocumentPaginationRow::new).collect(Collectors.toList());
         return new DefaultPaginationResultSet(total,
                 new DefaultPaginationResultSetMetadata(pageable, inferColumns(documents)), rows);
->>>>>>> c21af2b (1、修改 Uni Pagination Web Spring Boot Starter 组织唯一标识为 uni-pagination-web-spring-boot-starter)
     }
 
-    private FindIterable<Document> applyFindOptions(MongoFindOptions options, FindIterable<Document> find) {
-        // projection
-        Bson projection = options.getProjection();
+    protected FindIterable<Document> applyFindOptions(MongoPaginationStatement statement, FindIterable<Document> find) {
+        Bson projection = statement.getProjection();
         if (projection != null) {
             find = find.projection(projection);
         }
 
-        // batchSize (>0 生效)
-        if (options.getBatchSize() > 0) {
-            find = find.batchSize(options.getBatchSize());
+        Pageable pageable = statement.getPageable();
+        Sort sort = pageable.getSort();
+        if (sort != null && sort.isSorted()) {
+            Document sortDoc = new Document();
+            for (Sort.Order order : sort) {
+                sortDoc.append(order.getProperty(), order.isAscending() ? 1 : -1);
+            }
+            find = find.sort(sortDoc);
         }
+        int skip = pageable.getPageNumber() * pageable.getPageSize();
+        find = find.skip(skip).limit(pageable.getPageSize());
 
-        // maxTime / maxAwaitTime (>0 生效)
-        long maxTimeMs = options.getMaxTime(TimeUnit.MILLISECONDS);
-        if (maxTimeMs > 0) {
-            find = find.maxTime(maxTimeMs, TimeUnit.MILLISECONDS);
+        // Options
+        MongoFindOptions options = statement.getFindOptions();
+        if (options != null) {
+            if (options.getBatchSize() > 0) {
+                find = find.batchSize(options.getBatchSize());
+            }
+            long maxTimeMs = options.getMaxTime(TimeUnit.MILLISECONDS);
+            if (maxTimeMs > 0) {
+                find = find.maxTime(maxTimeMs, TimeUnit.MILLISECONDS);
+            }
+            long maxAwaitTimeMs = options.getMaxAwaitTime(TimeUnit.MILLISECONDS);
+            if (maxAwaitTimeMs > 0) {
+                find = find.maxAwaitTime(maxAwaitTimeMs, TimeUnit.MILLISECONDS);
+            }
+            if (options.getCollation() != null) {
+                find = find.collation(options.getCollation());
+            }
+            if (options.getHint() != null) {
+                find = find.hint(options.getHint());
+            } else if (options.getHintString() != null) {
+                find = find.hintString(options.getHintString());
+            }
+            if (options.getComment() != null) {
+                find = find.comment(options.getComment());
+            }
+            if (options.getLet() != null) {
+                find = find.let(options.getLet());
+            }
+            if (options.getMin() != null) {
+                find = find.min(options.getMin());
+            }
+            if (options.getMax() != null) {
+                find = find.max(options.getMax());
+            }
+            if (options.getCursorType() != null) {
+                find = find.cursorType(options.getCursorType());
+            }
+            find = find.noCursorTimeout(options.isNoCursorTimeout());
+            if (options.isOplogReplay()) {
+                find = find.oplogReplay(true);
+            }
+            if (options.isPartial()) {
+                find = find.partial(true);
+            }
+            if (options.isReturnKey()) {
+                find = find.returnKey(true);
+            }
+            if (options.isShowRecordId()) {
+                find = find.showRecordId(true);
+            }
+            if (options.isAllowDiskUse() != null) {
+                find = find.allowDiskUse(options.isAllowDiskUse());
+            }
         }
-        long maxAwaitTimeMs = options.getMaxAwaitTime(TimeUnit.MILLISECONDS);
-        if (maxAwaitTimeMs > 0) {
-            find = find.maxAwaitTime(maxAwaitTimeMs, TimeUnit.MILLISECONDS);
-        }
-
-        // collation
-        if (options.getCollation() != null) {
-            find = find.collation(options.getCollation());
-        }
-
-        // hint / hintString（先使用 hint，其次 hintString）
-        if (options.getHint() != null) {
-            find = find.hint(options.getHint());
-        } else if (options.getHintString() != null) {
-            find = find.hintString(options.getHintString());
-        }
-
-        // comment
-        if (options.getComment() != null) {
-            find = find.comment(options.getComment());
-        }
-
-        // let (variables)
-        if (options.getLet() != null) {
-            find = find.let(options.getLet());
-        }
-
-        // min / max（索引边界）
-        if (options.getMin() != null) {
-            find = find.min(options.getMin());
-        }
-        if (options.getMax() != null) {
-            find = find.max(options.getMax());
-        }
-
-        // cursorType（Tailable/Await/NonTailable）
-        if (options.getCursorType() != null) {
-            find = find.cursorType(options.getCursorType());
-        }
-
-        // noCursorTimeout / oplogReplay / partial
-        find = find.noCursorTimeout(options.isNoCursorTimeout());
-        if (options.isOplogReplay()) {
-            find = find.oplogReplay(true);
-        }
-        if (options.isPartial()) {
-            find = find.partial(true);
-        }
-
-        // returnKey / showRecordId
-        if (options.isReturnKey()) {
-            find = find.returnKey(true);
-        }
-        if (options.isShowRecordId()) {
-            find = find.showRecordId(true);
-        }
-
-        // allowDiskUse（Boolean）
-        if (options.isAllowDiskUse() != null) {
-            find = find.allowDiskUse(options.isAllowDiskUse());
-        }
-
-        // limit/skip/sort 由分页器统一处理，这里不应用
         return find;
     }
 
-    private MongoCollection<Document> getCollection(MongoPaginationStatement statement) {
-        return mongoDatabase.get().getCollection(statement.getCollection());
-    }
-
-    private Bson toMongoSort(Sort sort) {
-        if (sort == null || !sort.isSorted()) {
-            return null;
-        }
-        Document sortDoc = new Document();
-        for (Sort.Order order : sort) {
-            sortDoc.append(order.getProperty(), order.isAscending() ? 1 : -1);
-        }
-        return sortDoc;
+    protected MongoCollection<Document> getCollection(MongoPaginationStatement statement) {
+        return databaseProvider.get().getCollection(statement.getCollection());
     }
 
     private List<ColumnMetadata> inferColumns(List<Document> documents) {

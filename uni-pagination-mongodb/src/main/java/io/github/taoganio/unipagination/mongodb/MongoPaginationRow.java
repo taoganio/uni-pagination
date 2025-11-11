@@ -11,15 +11,8 @@ import java.util.List;
 
 public interface MongoPaginationRow extends PaginationRow, Bson {
 
-<<<<<<< HEAD
-    public MongoPaginationRow(Document document, PaginationResultSetMetadata metadata) {
-        this.document = document;
-        this.metadata = metadata;
-    }
-=======
     @Nullable
     <T> T getEmbedded(List<?> keys, Class<T> clazz);
->>>>>>> c21af2b (1、修改 Uni Pagination Web Spring Boot Starter 组织唯一标识为 uni-pagination-web-spring-boot-starter)
 
     @Nullable
     <T> T getEmbedded(List<?> keys, T defaultValue);

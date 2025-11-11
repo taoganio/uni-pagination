@@ -6,6 +6,8 @@ import org.bson.conversions.Bson;
 
 import jakarta.annotation.Nullable;
 
+import java.util.function.Function;
+
 /**
  * MongoDB 分页语句
  */
@@ -17,7 +19,7 @@ public interface MongoPaginationStatement extends PaginationStatement {
     }
 
     /**
-     * 获取完整可执行的原始语句，例如 runCommand 的命令 Document
+     * 获取MongoDb 可执行的原始 runCommand 语句
      */
     Document getNativeStatement();
 
@@ -29,13 +31,25 @@ public interface MongoPaginationStatement extends PaginationStatement {
     /**
      * 查询过滤条件
      */
+    @Nullable
     Bson getFilter();
+
+    /**
+     * 查询字段
+     */
+    @Nullable
+    Bson getProjection();
 
     /**
      * 选项
      */
     @Nullable
     MongoFindOptions getFindOptions();
+
+    static MongoPaginationStatement of(
+            Function<MongoFindPaginationStatement.Builder, MongoFindPaginationStatement.Builder> function) {
+        return MongoFindPaginationStatement.of(function);
+    }
 }
 
 

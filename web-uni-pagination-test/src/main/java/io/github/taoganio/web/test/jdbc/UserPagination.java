@@ -15,7 +15,7 @@ import javax.validation.Valid;
 @PaginationController
 public class UserPagination {
 
-    @PostMapping({"mongodb/user", "user"})
+    @PostMapping({"db-user", "user"})
     public PaginationStatement user(@RequestParam(value = "page", defaultValue = "1") Integer page,
                                     @RequestParam(value = "size", defaultValue = "10") Integer size,
                                     @RequestParam(value = "mobile", required = false) String mobile) {

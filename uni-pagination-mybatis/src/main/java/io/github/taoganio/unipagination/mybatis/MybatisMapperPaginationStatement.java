@@ -51,9 +51,17 @@ public class MybatisMapperPaginationStatement extends BasePaginationStatement im
         return parameter;
     }
 
-    public static <T> MybatisMapperPaginationStatement of(Class<T> mapperClass,
-                                                          Function<Builder<T>, Builder<T>> function) {
-        return function.apply(new Builder<>(mapperClass)).build();
+    @Override
+    public String toString() {
+        return mappedStatementId;
+    }
+
+    public static <T> Builder<T> builder(Class<T> mapperClass) {
+        return new Builder<>(mapperClass);
+    }
+
+    public static <T> MybatisMapperPaginationStatement of(Class<T> mapperClass, Function<Builder<T>, Builder<T>> function) {
+        return function.apply(builder(mapperClass)).build();
     }
 
     public static class Builder<T>

@@ -1,13 +1,18 @@
 package io.github.taoganio.unipagination.mongodb;
 
+import io.github.taoganio.unipagination.domain.Pageable;
 import io.github.taoganio.unipagination.domain.Sort;
 import io.github.taoganio.unipagination.statement.BasePaginationStatement;
 import io.github.taoganio.unipagination.statement.BasePaginationStatementBuilder;
 import io.github.taoganio.unipagination.util.Assert;
+import org.bson.BsonString;
 import org.bson.conversions.Bson;
 import org.bson.Document;
 
 import jakarta.annotation.Nullable;
+
+import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 
 /**
  * MongoDB Find 语句
@@ -16,6 +21,7 @@ public class MongoFindPaginationStatement extends BasePaginationStatement implem
 
     private final String collectionName;
     private final Bson filter;
+    private final Bson projection;
     @Nullable
     private final MongoFindOptions findOptions;
 
@@ -23,110 +29,65 @@ public class MongoFindPaginationStatement extends BasePaginationStatement implem
         super(builder.getPageable());
         Assert.notEmpty(builder.collectionName, "collectionName must not be empty!");
         this.collectionName = builder.collectionName;
+        this.projection = builder.projection;
         this.filter = builder.filter;
         this.findOptions = builder.findOptions;
     }
 
     @Override
     public Document getNativeStatement() {
-        // 构造完整的 runCommand find 命令（不包含分页与排序：skip/limit/sort 由执行器处理）
+        // 构造 runCommand find 命令
         Document cmd = new Document("find", collectionName);
         if (filter != null) {
-            cmd.append("filter", filter);
+            cmd.append("filter", filter.toBsonDocument());
+        }
+        if (projection != null) {
+            cmd.append("projection", projection.toBsonDocument());
+        }
+
+        Pageable pageable = getPageable();
+        int pageSize = pageable.getPageSize();
+        int pageNumber = pageable.getPageNumber();
+        int skip = pageNumber * pageSize;
+        cmd.append("limit", pageSize);
+        cmd.append("skip", skip);
+        if (pageable.getSort() != null && pageable.getSort().isSorted()) {
+            Document sortDoc = new Document();
+            for (Sort.Order order : pageable.getSort()) {
+                sortDoc.append(order.getProperty(), order.isAscending() ? 1 : -1);
+            }
+            cmd.append("sort", sortDoc);
         }
 
         MongoFindOptions options = this.findOptions;
         if (options != null) {
-            // projection
-            if (options.getProjection() != null) {
-                cmd.append("projection", options.getProjection());
-            }
-            // batchSize
             if (options.getBatchSize() > 0) {
                 cmd.append("batchSize", options.getBatchSize());
             }
-            // maxTimeMS / maxAwaitTimeMS
-            long maxTimeMs = options.getMaxTime(java.util.concurrent.TimeUnit.MILLISECONDS);
+            long maxTimeMs = options.getMaxTime(TimeUnit.MILLISECONDS);
             if (maxTimeMs > 0) {
                 cmd.append("maxTimeMS", maxTimeMs);
             }
-            long maxAwaitTimeMs = options.getMaxAwaitTime(java.util.concurrent.TimeUnit.MILLISECONDS);
-            if (maxAwaitTimeMs > 0) {
-                cmd.append("maxAwaitTimeMS", maxAwaitTimeMs);
-            }
-            // collation
             if (options.getCollation() != null) {
                 cmd.append("collation", options.getCollation().asDocument());
             }
-            // hint / hintString
             if (options.getHint() != null) {
-                cmd.append("hint", options.getHint());
+                cmd.append("hint", options.getHint().toBsonDocument());
             } else if (options.getHintString() != null) {
-                cmd.append("hint", options.getHintString());
+                cmd.append("hint", new BsonString(options.getHintString()));
             }
-            // comment
             if (options.getComment() != null) {
                 cmd.append("comment", options.getComment());
             }
-            // let
-            if (options.getLet() != null) {
-                cmd.append("let", options.getLet());
-            }
-            // min / max
-            if (options.getMin() != null) {
-                cmd.append("min", options.getMin());
-            }
-            if (options.getMax() != null) {
-                cmd.append("max", options.getMax());
-            }
-            // returnKey / showRecordId
-            if (options.isReturnKey()) {
-                cmd.append("returnKey", true);
-            }
-            if (options.isShowRecordId()) {
-                cmd.append("showRecordId", true);
-            }
-            // allowDiskUse
             if (options.isAllowDiskUse() != null) {
                 cmd.append("allowDiskUse", options.isAllowDiskUse());
             }
-            // 游标与超时相关
             if (options.isNoCursorTimeout()) {
                 cmd.append("noCursorTimeout", true);
-            }
-            if (options.isOplogReplay()) {
-                cmd.append("oplogReplay", true);
             }
             if (options.isPartial()) {
                 cmd.append("allowPartialResults", true);
             }
-            if (options.getCursorType() != null) {
-                switch (options.getCursorType()) {
-                    case Tailable:
-                        cmd.append("tailable", true);
-                        break;
-                    case TailableAwait:
-                        cmd.append("tailable", true).append("awaitData", true);
-                        break;
-                    case NonTailable:
-                    default:
-                        break;
-                }
-            }
-        }
-
-        // 基于 Pageable 标识 limit/skip/sort
-        int pageSize = Math.max(getPageable().getPageSize(), 0);
-        int pageNumber = Math.max(getPageable().getPageNumber(), 0);
-        int skip = pageNumber * pageSize;
-        cmd.append("limit", pageSize);
-        cmd.append("skip", skip);
-        if (getPageable().getSort() != null && getPageable().getSort().isSorted()) {
-            Document sortDoc = new Document();
-            for (Sort.Order order : getPageable().getSort()) {
-                sortDoc.append(order.getProperty(), order.isAscending() ? 1 : -1);
-            }
-            cmd.append("sort", sortDoc);
         }
 
         return cmd;
@@ -142,14 +103,28 @@ public class MongoFindPaginationStatement extends BasePaginationStatement implem
         return filter;
     }
 
+    @Override
+    public Bson getProjection() {
+        return projection;
+    }
+
     @Nullable
     @Override
     public MongoFindOptions getFindOptions() {
         return findOptions;
     }
 
-    public static Builder of() {
+    public static Builder builder() {
         return new Builder();
+    }
+
+    public static MongoFindPaginationStatement of(Function<Builder, Builder> builderFunction) {
+        return builderFunction.apply(builder()).build();
+    }
+
+    @Override
+    public String toString() {
+        return getNativeStatement().toJson();
     }
 
     public static class Builder extends BasePaginationStatementBuilder<MongoFindPaginationStatement, Builder> {
@@ -159,6 +134,8 @@ public class MongoFindPaginationStatement extends BasePaginationStatement implem
         private Bson filter;
         @Nullable
         private MongoFindOptions findOptions;
+        @Nullable
+        private Bson projection;
 
         public Builder collection(String collectionName) {
             this.collectionName = collectionName;
@@ -170,8 +147,18 @@ public class MongoFindPaginationStatement extends BasePaginationStatement implem
             return self();
         }
 
-        public Builder findOptions(@Nullable MongoFindOptions findOptions) {
+        public Builder projection(@Nullable Bson projection) {
+            this.projection = projection;
+            return self();
+        }
+
+        public Builder options(@Nullable MongoFindOptions findOptions) {
             this.findOptions = findOptions;
+            return self();
+        }
+
+        public Builder options(Function<MongoFindOptions, MongoFindOptions> findOptions) {
+            this.findOptions = findOptions.apply(new MongoFindOptions());
             return self();
         }
 
@@ -182,6 +169,7 @@ public class MongoFindPaginationStatement extends BasePaginationStatement implem
 
         @Override
         public MongoFindPaginationStatement build() {
+            Assert.notEmpty(collectionName, "collectionName must not be empty!");
             return new MongoFindPaginationStatement(this);
         }
 

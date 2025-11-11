@@ -36,8 +36,12 @@ public class NamedParameterJdbcStatement extends BasePaginationStatement impleme
         this.paramMap = Collections.unmodifiableMap(builder.paramMap);
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public static NamedParameterJdbcStatement of(Function<Builder, Builder> builder) {
-        return builder.apply(new Builder()).build();
+        return builder.apply(builder()).build();
     }
 
     public static Builder sql(String sql) {
@@ -52,6 +56,11 @@ public class NamedParameterJdbcStatement extends BasePaginationStatement impleme
     @Override
     public Map<String, Object> getParameter() {
         return paramMap;
+    }
+
+    @Override
+    public String toString() {
+        return sql;
     }
 
     /**

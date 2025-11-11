@@ -14,6 +14,9 @@ public class PageRequest implements Pageable {
         if (pageNumber < 0) {
             throw new IllegalArgumentException("Page index must not be less than zero");
         }
+        if (pageSize < 1) {
+            throw new IllegalArgumentException("Page size must not be less than one!");
+        }
         this.pageNumber = pageNumber;
         this.pageSize = pageSize;
         this.sort = sort == null ? Sort.unsorted() : sort;

@@ -14,12 +14,8 @@ import static com.mongodb.assertions.Assertions.notNull;
 
 public class MongoFindOptions {
     private int batchSize;
-    private int limit;
-    private Bson projection;
     private long maxTimeMS;
     private long maxAwaitTimeMS;
-    private int skip;
-    private Bson sort;
     private CursorType cursorType = CursorType.NonTailable;
     private boolean noCursorTimeout;
     private boolean oplogReplay;
@@ -38,18 +34,13 @@ public class MongoFindOptions {
     public MongoFindOptions() {
     }
 
-    MongoFindOptions(
-            final int batchSize, final int limit, final Bson projection, final long maxTimeMS, final long maxAwaitTimeMS, final int skip,
-            final Bson sort, final CursorType cursorType, final boolean noCursorTimeout, final boolean oplogReplay, final boolean partial,
-            final Collation collation, final BsonValue comment, final Bson hint, final String hintString, final Bson variables,
-            final Bson max, final Bson min, final boolean returnKey, final boolean showRecordId, final Boolean allowDiskUse) {
+    MongoFindOptions(final int batchSize, final long maxTimeMS, final long maxAwaitTimeMS,
+                     final CursorType cursorType, final boolean noCursorTimeout, final boolean oplogReplay, final boolean partial,
+                     final Collation collation, final BsonValue comment, final Bson hint, final String hintString, final Bson variables,
+                     final Bson max, final Bson min, final boolean returnKey, final boolean showRecordId, final Boolean allowDiskUse) {
         this.batchSize = batchSize;
-        this.limit = limit;
-        this.projection = projection;
         this.maxTimeMS = maxTimeMS;
         this.maxAwaitTimeMS = maxAwaitTimeMS;
-        this.skip = skip;
-        this.sort = sort;
         this.cursorType = cursorType;
         this.noCursorTimeout = noCursorTimeout;
         this.oplogReplay = oplogReplay;
@@ -71,7 +62,7 @@ public class MongoFindOptions {
     }
 
     public MongoFindOptions withBatchSize(final int batchSize) {
-        return new MongoFindOptions(batchSize, limit, projection, maxTimeMS, maxAwaitTimeMS, skip, sort, cursorType, noCursorTimeout,
+        return new MongoFindOptions(batchSize, maxTimeMS, maxAwaitTimeMS, cursorType, noCursorTimeout,
                 oplogReplay, partial, collation, comment, hint, hintString, variables, max, min, returnKey, showRecordId, allowDiskUse);
     }
 
@@ -105,16 +96,6 @@ public class MongoFindOptions {
 
     public MongoFindOptions batchSize(final int batchSize) {
         this.batchSize = batchSize;
-        return this;
-    }
-
-    @Nullable
-    public Bson getProjection() {
-        return projection;
-    }
-
-    public MongoFindOptions projection(@Nullable final Bson projection) {
-        this.projection = projection;
         return this;
     }
 
@@ -260,12 +241,8 @@ public class MongoFindOptions {
     public String toString() {
         return "MongoFindOptions{"
                 + "batchSize=" + batchSize
-                + ", limit=" + limit
-                + ", projection=" + projection
                 + ", maxTimeMS=" + maxTimeMS
                 + ", maxAwaitTimeMS=" + maxAwaitTimeMS
-                + ", skip=" + skip
-                + ", sort=" + sort
                 + ", cursorType=" + cursorType
                 + ", noCursorTimeout=" + noCursorTimeout
                 + ", oplogReplay=" + oplogReplay
