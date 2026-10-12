@@ -33,6 +33,8 @@ public class PaginationWebProperties {
 
             Action exports = new Action();
             exports.setAction("exports");
+            actions.add(exports);
+            
             return actions;
         }
         return actions;
